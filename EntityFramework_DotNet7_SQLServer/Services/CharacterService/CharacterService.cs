@@ -40,15 +40,30 @@ public class CharacterService : ICharacterService
 
     public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
     {
-        var character = _characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+        var serviceResponse = new ServiceResponse<GetCharacterDto>();
 
-        character.Name = updatedCharacter.Name;
-        character.HitPoints = updatedCharacter.HitPoints;
-        character.Strength = updatedCharacter.Strength;
-        character.Defense = updatedCharacter.Defense;
-        character.Intelligence = updatedCharacter.Intelligence;
-        character.Class = updatedCharacter.Class;
+        try
+        {
+            var character = _characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+            if (character is null)
+            {
+                throw new Exception($"Character with Id '{updatedCharacter.Id}' not found");
+            }
 
-        return new ServiceResponse<GetCharacterDto> { Data = _mapper.Map<GetCharacterDto>(character) };
+            character.Name = updatedCharacter.Name;
+            character.HitPoints = updatedCharacter.HitPoints;
+            character.Strength = updatedCharacter.Strength;
+            character.Defense = updatedCharacter.Defense;
+            character.Intelligence = updatedCharacter.Intelligence;
+            character.Class = updatedCharacter.Class;
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+        }
+        catch (Exception e)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = e.Message;
+        }
+
+        return serviceResponse;
     }
 }

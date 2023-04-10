@@ -26,14 +26,22 @@ public class CharacterController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(AddCharacterDto newCharacter)
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(
+        AddCharacterDto newCharacter)
     {
         return Ok(await _characterService.AddCharacterAsync(newCharacter));
     }
-    
+
     [HttpPut]
-    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacterAsync(
+        UpdateCharacterDto updatedCharacter)
     {
-        return Ok(await _characterService.UpdateCharacterAsync(updatedCharacter));
+        var response = await _characterService.UpdateCharacterAsync(updatedCharacter);
+        if (response.Data is null)
+        {
+            return NotFound(response);
+        }
+
+        return Ok(response);
     }
 }

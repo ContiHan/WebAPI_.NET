@@ -30,4 +30,10 @@ public class CharacterController : ControllerBase
     {
         return Ok(await _characterService.AddCharacterAsync(newCharacter));
     }
+    
+    [HttpPut]
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+    {
+        return Ok(await _characterService.UpdateCharacterAsync(updatedCharacter));
+    }
 }

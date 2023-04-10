@@ -4,7 +4,7 @@ public class CharacterService : ICharacterService
 {
     private readonly IMapper _mapper;
 
-    private readonly List<Character> _characters = new()
+    private static List<Character> _characters = new()
     {
         new Character(),
         new Character
@@ -36,5 +36,19 @@ public class CharacterService : ICharacterService
         character.Id = _characters.Max(c => c.Id) + 1;
         _characters.Add(character);
         return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
+    }
+
+    public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+    {
+        var character = _characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+
+        character.Name = updatedCharacter.Name;
+        character.HitPoints = updatedCharacter.HitPoints;
+        character.Strength = updatedCharacter.Strength;
+        character.Defense = updatedCharacter.Defense;
+        character.Intelligence = updatedCharacter.Intelligence;
+        character.Class = updatedCharacter.Class;
+
+        return new ServiceResponse<GetCharacterDto> { Data = _mapper.Map<GetCharacterDto>(character) };
     }
 }

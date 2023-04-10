@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "mMJMlUQ8Mnxl0F7lOvaurelhFLRXTtSmYSfbIRlWTMY=",
+  "Source": "EntityFramework_DotNet7_SQLServer",
+  "BasePath": "_content/EntityFramework_DotNet7_SQLServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

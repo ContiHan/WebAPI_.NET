@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\EntityFramework_DotNet7_SQLServer.props" />
+</Project>

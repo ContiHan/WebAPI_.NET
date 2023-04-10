@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\EntityFramework_DotNet7_SQLServer.props" />
+</Project>

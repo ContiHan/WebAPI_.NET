@@ -19,17 +19,23 @@ public class CharacterController : ControllerBase
         return Ok(await _characterService.GetAllAsync());
     }
 
-    [HttpGet(nameof(GetCharacterByIdAsync) + "/{id}")]
+    [HttpGet(nameof(GetCharacterByIdAsync) + "/{id}", Name = nameof(GetCharacterByIdAsync))]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterByIdAsync(int id)
     {
         return Ok(await _characterService.GetByIdAsync(id));
     }
 
     [HttpPost]
-    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateCharacterAsync(
         AddCharacterDto newCharacter)
     {
-        return Ok(await _characterService.AddAsync(newCharacter));
+        var response = await _characterService.AddAsync(newCharacter);
+        if (response.Data is null)
+        {
+            return NotFound(response.Message);
+        }
+
+        return CreatedAtRoute(nameof(GetCharacterByIdAsync), new { id = response.Data.Id }, response);
     }
 
     [HttpPut]

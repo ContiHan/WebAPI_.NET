@@ -30,12 +30,12 @@ public class CharacterServiceNoDb : ICharacterService
             { Data = _mapper.Map<GetCharacterDto>(_characters.FirstOrDefault(c => c.Id == id)) };
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
+    public async Task<ServiceResponse<GetCharacterDto>> AddAsync(AddCharacterDto newCharacter)
     {
         var character = _mapper.Map<Character>(newCharacter);
         character.Id = _characters.Max(c => c.Id) + 1;
         _characters.Add(character);
-        return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
+        return new ServiceResponse<GetCharacterDto> { Data = _mapper.Map<GetCharacterDto>(character) };
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> UpdateAsync(UpdateCharacterDto updatedCharacter)

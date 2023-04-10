@@ -23,12 +23,13 @@ public class CharacterServiceSqlDb : ICharacterService
             { Data = _mapper.Map<GetCharacterDto>(await _context.Characters.FirstOrDefaultAsync(c => c.Id == id)) };
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
+    public async Task<ServiceResponse<GetCharacterDto>> AddAsync(AddCharacterDto newCharacter)
     {
-        _context.Characters.Add(_mapper.Map<Character>(newCharacter));
+        var character = _mapper.Map<Character>(newCharacter);
+        _context.Characters.Add(character);
         await _context.SaveChangesAsync();
-        return new ServiceResponse<List<GetCharacterDto>>
-            { Data = _mapper.Map<List<GetCharacterDto>>(await _context.Characters.ToListAsync()) };
+        return new ServiceResponse<GetCharacterDto>
+            { Data = _mapper.Map<GetCharacterDto>(character) };
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> UpdateAsync(UpdateCharacterDto updatedCharacter)

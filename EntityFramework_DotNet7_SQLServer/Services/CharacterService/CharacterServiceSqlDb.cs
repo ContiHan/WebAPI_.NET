@@ -25,8 +25,7 @@ public class CharacterServiceSqlDb : ICharacterService
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
     {
-        var character = _mapper.Map<Character>(newCharacter);
-        await _context.Characters.AddAsync(character);
+        _context.Characters.Add(_mapper.Map<Character>(newCharacter));
         await _context.SaveChangesAsync();
         return new ServiceResponse<List<GetCharacterDto>>
             { Data = _mapper.Map<List<GetCharacterDto>>(await _context.Characters.ToListAsync()) };

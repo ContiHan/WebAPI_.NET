@@ -57,9 +57,9 @@ public class CharacterServiceSqlDb : ICharacterService
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteByIdAsync(int id)
+    public async Task<ServiceResponse<GetCharacterDto>> DeleteByIdAsync(int id)
     {
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        var serviceResponse = new ServiceResponse<GetCharacterDto>();
 
         try
         {
@@ -71,7 +71,8 @@ public class CharacterServiceSqlDb : ICharacterService
 
             _context.Remove(character);
             await _context.SaveChangesAsync();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _context.Characters.ToListAsync());
+            serviceResponse.Message = $"Character '{character.Name}' has been deleted";
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception e)
         {

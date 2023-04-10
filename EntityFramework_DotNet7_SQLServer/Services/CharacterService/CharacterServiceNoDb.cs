@@ -1,6 +1,6 @@
 ﻿namespace EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 
-public class CharacterService : ICharacterService
+public class CharacterServiceNoDb : ICharacterService
 {
     private readonly IMapper _mapper;
 
@@ -14,7 +14,7 @@ public class CharacterService : ICharacterService
         }
     };
 
-    public CharacterService(IMapper mapper)
+    public CharacterServiceNoDb(IMapper mapper)
     {
         _mapper = mapper;
     }

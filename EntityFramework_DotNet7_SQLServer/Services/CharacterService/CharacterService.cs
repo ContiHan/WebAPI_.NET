@@ -30,7 +30,7 @@ public class CharacterService : ICharacterService
             { Data = _mapper.Map<GetCharacterDto>(_characters.FirstOrDefault(c => c.Id == id)) };
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
     {
         var character = _mapper.Map<Character>(newCharacter);
         character.Id = _characters.Max(c => c.Id) + 1;
@@ -38,7 +38,7 @@ public class CharacterService : ICharacterService
         return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
+    public async Task<ServiceResponse<GetCharacterDto>> UpdateAsync(UpdateCharacterDto updatedCharacter)
     {
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
 

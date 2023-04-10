@@ -13,14 +13,14 @@ public class CharacterController : ControllerBase
         _characterService = characterService;
     }
 
-    [HttpGet(nameof(GetAllAsync))]
-    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
+    [HttpGet(nameof(GetAllCharactersAsync))]
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharactersAsync()
     {
         return Ok(await _characterService.GetAllAsync());
     }
 
-    [HttpGet(nameof(GetByIdAsync) + "/{id}")]
-    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetByIdAsync(int id)
+    [HttpGet(nameof(GetCharacterByIdAsync) + "/{id}")]
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterByIdAsync(int id)
     {
         return Ok(await _characterService.GetByIdAsync(id));
     }
@@ -29,14 +29,14 @@ public class CharacterController : ControllerBase
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(
         AddCharacterDto newCharacter)
     {
-        return Ok(await _characterService.AddCharacterAsync(newCharacter));
+        return Ok(await _characterService.AddAsync(newCharacter));
     }
 
     [HttpPut]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacterAsync(
         UpdateCharacterDto updatedCharacter)
     {
-        var response = await _characterService.UpdateCharacterAsync(updatedCharacter);
+        var response = await _characterService.UpdateAsync(updatedCharacter);
         if (response.Data is null)
         {
             return NotFound(response);
@@ -45,8 +45,8 @@ public class CharacterController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete(nameof(DeleteByIdAsync) + "/{id}")]
-    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> DeleteByIdAsync(int id)
+    [HttpDelete(nameof(DeleteCharacterByIdAsync) + "/{id}")]
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> DeleteCharacterByIdAsync(int id)
     {
         var response = await _characterService.DeleteByIdAsync(id);
         if (response.Data is null)

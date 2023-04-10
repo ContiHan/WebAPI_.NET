@@ -13,18 +13,22 @@ public class CharacterController : ControllerBase
         _characterService = characterService;
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet(nameof(GetAllCharactersAsync))]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharactersAsync()
     {
         return Ok(await _characterService.GetAllAsync());
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet(nameof(GetCharacterByIdAsync) + "/{id}", Name = nameof(GetCharacterByIdAsync))]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetCharacterByIdAsync(int id)
     {
         return Ok(await _characterService.GetByIdAsync(id));
     }
 
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateCharacterAsync(
         AddCharacterDto newCharacter)
@@ -38,6 +42,8 @@ public class CharacterController : ControllerBase
         return CreatedAtRoute(nameof(GetCharacterByIdAsync), new { id = response.Data.Id }, response);
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacterAsync(
         UpdateCharacterDto updatedCharacter)
@@ -51,6 +57,8 @@ public class CharacterController : ControllerBase
         return Ok(response);
     }
 
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpDelete(nameof(DeleteCharacterByIdAsync) + "/{id}")]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> DeleteCharacterByIdAsync(int id)
     {

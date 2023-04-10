@@ -14,19 +14,19 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet(nameof(GetAllAsync))]
-    public async Task<ActionResult<ServiceResponse<List<Character>>>> GetAllAsync()
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllAsync()
     {
         return Ok(await _characterService.GetAllAsync());
     }
 
     [HttpGet(nameof(GetByIdAsync) + "/{id}")]
-    public async Task<ActionResult<ServiceResponse<Character>>> GetByIdAsync(int id)
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetByIdAsync(int id)
     {
         return Ok(await _characterService.GetByIdAsync(id));
     }
 
     [HttpPost]
-    public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacterAsync(Character newCharacter)
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacterAsync(AddCharacterDto newCharacter)
     {
         return Ok(await _characterService.AddCharacterAsync(newCharacter));
     }

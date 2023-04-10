@@ -12,19 +12,19 @@ public class CharacterService : ICharacterService
         }
     };
 
-    public async Task<ServiceResponse<List<Character>>> GetAllAsync()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
     {
-        return new ServiceResponse<List<Character>> { Data = _characters };
+        return new ServiceResponse<List<GetCharacterDto>> { Data = _characters };
     }
 
-    public async Task<ServiceResponse<Character>> GetByIdAsync(int id)
+    public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)
     {
-        return new ServiceResponse<Character> { Data = _characters.FirstOrDefault(c => c.Id == id) };
+        return new ServiceResponse<GetCharacterDto> { Data = _characters.FirstOrDefault(c => c.Id == id) };
     }
 
-    public async Task<ServiceResponse<List<Character>>> AddCharacterAsync(Character newCharacter)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
     {
         _characters.Add(newCharacter);
-        return new ServiceResponse<List<Character>> { Data = _characters };
+        return new ServiceResponse<List<GetCharacterDto>> { Data = _characters };
     }
 }

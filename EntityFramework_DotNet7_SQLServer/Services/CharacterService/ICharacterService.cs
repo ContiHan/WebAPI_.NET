@@ -2,7 +2,7 @@
 
 public interface ICharacterService
 {
-    public Task<ServiceResponse<List<Character>>> GetAllAsync();
-    public Task<ServiceResponse<Character>> GetByIdAsync(int id);
-    public Task<ServiceResponse<List<Character>>> AddCharacterAsync(Character newCharacter);
+    public Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync();
+    public Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id);
+    public Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter);
 }

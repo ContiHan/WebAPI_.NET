@@ -1,5 +1,7 @@
 global using EntityFramework_DotNet7_SQLServer.Models;
 global using EntityFramework_DotNet7_SQLServer.Services.CharacterService;
+global using EntityFramework_DotNet7_SQLServer.Dtos.Character;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

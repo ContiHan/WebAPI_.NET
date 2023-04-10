@@ -31,3 +31,5 @@ C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\obj\Debug\
 C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\obj\Debug\net7.0\EntityFramework_DotNet7_SQLServer.pdb
 C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\obj\Debug\net7.0\EntityFramework_DotNet7_SQLServer.genruntimeconfig.cache
 C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\obj\Debug\net7.0\ref\EntityFramework_DotNet7_SQLServer.dll
+C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\danie\RiderProjects\WebAPI\EntityFramework_DotNet7_SQLServer\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

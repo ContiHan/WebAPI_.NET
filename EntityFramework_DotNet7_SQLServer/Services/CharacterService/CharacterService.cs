@@ -2,6 +2,8 @@
 
 public class CharacterService : ICharacterService
 {
+    private readonly IMapper _mapper;
+
     private readonly List<Character> _characters = new()
     {
         new Character(),
@@ -12,19 +14,27 @@ public class CharacterService : ICharacterService
         }
     };
 
+    public CharacterService(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
     {
-        return new ServiceResponse<List<GetCharacterDto>> { Data = _characters };
+        return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)
     {
-        return new ServiceResponse<GetCharacterDto> { Data = _characters.FirstOrDefault(c => c.Id == id) };
+        return new ServiceResponse<GetCharacterDto>
+            { Data = _mapper.Map<GetCharacterDto>(_characters.FirstOrDefault(c => c.Id == id)) };
     }
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
     {
-        _characters.Add(newCharacter);
-        return new ServiceResponse<List<GetCharacterDto>> { Data = _characters };
+        var character = _mapper.Map<Character>(newCharacter);
+        character.Id = _characters.Max(c => c.Id) + 1;
+        _characters.Add(character);
+        return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
     }
 }

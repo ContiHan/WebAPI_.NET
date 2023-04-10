@@ -44,7 +44,6 @@ public class CharacterServiceSqlDb : ICharacterService
             }
 
             _mapper.Map(updatedCharacter, character);
-            _context.Characters.Update(character);
             await _context.SaveChangesAsync();
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
         }

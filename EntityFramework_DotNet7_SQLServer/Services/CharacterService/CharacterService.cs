@@ -50,12 +50,7 @@ public class CharacterService : ICharacterService
                 throw new Exception($"Character with Id '{updatedCharacter.Id}' not found");
             }
 
-            character.Name = updatedCharacter.Name;
-            character.HitPoints = updatedCharacter.HitPoints;
-            character.Strength = updatedCharacter.Strength;
-            character.Defense = updatedCharacter.Defense;
-            character.Intelligence = updatedCharacter.Intelligence;
-            character.Class = updatedCharacter.Class;
+            _mapper.Map(updatedCharacter, character);
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception e)

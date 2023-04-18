@@ -1,4 +1,6 @@
-﻿namespace EntityFramework_DotNet7_SQLServer.Data;
+﻿using Microsoft.IdentityModel.Abstractions;
+
+namespace EntityFramework_DotNet7_SQLServer.Data;
 
 public class AuthRepository : IAuthRepository
 {
@@ -9,10 +11,10 @@ public class AuthRepository : IAuthRepository
         _context = context;
     }
 
-    public async Task<ServiceResponse<int>> Register(User user, string password)
+    public async Task<ServiceResponse<int>> RegisterAsync(User user, string password)
     {
         var response = new ServiceResponse<int>();
-        if (await UserExists(user.Username))
+        if (await UserExistsAsync(user.Username))
         {
             response.Success = false;
             response.Message = $"User with username '{user.Username}' already exists";
@@ -29,12 +31,22 @@ public class AuthRepository : IAuthRepository
         return response;
     }
 
-    public Task<ServiceResponse<string>> Login(string username, string password)
+    public async Task<ServiceResponse<string>> LoginAsync(string username, string password)
     {
-        throw new NotImplementedException();
+        var response = new ServiceResponse<string>();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+        if (user is null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+        {
+            response.Success = false;
+            response.Message = $"Wrong username or password";
+            return response;
+        }
+
+        response.Data = user.Id.ToString();
+        return response;
     }
 
-    public async Task<bool> UserExists(string username)
+    public async Task<bool> UserExistsAsync(string username)
     {
         return await _context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
     }
@@ -44,5 +56,12 @@ public class AuthRepository : IAuthRepository
         using var hmac = new System.Security.Cryptography.HMACSHA512();
         passwordSalt = hmac.Key;
         passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    }
+
+    private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+    {
+        using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+        var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        return computedHash.SequenceEqual(passwordHash);
     }
 }

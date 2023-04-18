@@ -1,6 +1,7 @@
 global using EntityFramework_DotNet7_SQLServer.Models;
 global using EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 global using EntityFramework_DotNet7_SQLServer.Dtos.Character;
+global using EntityFramework_DotNet7_SQLServer.Dtos.User;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using EntityFramework_DotNet7_SQLServer.Data;
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterServiceSqlDb>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 

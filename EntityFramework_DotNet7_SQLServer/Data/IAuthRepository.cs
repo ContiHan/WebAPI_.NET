@@ -2,7 +2,7 @@
 
 public interface IAuthRepository
 {
-    public Task<ServiceResponse<int>> Register(User user, string password);
-    public Task<ServiceResponse<string>> Login(string username, string password);
-    public Task<bool> UserExists(string username);
+    public Task<ServiceResponse<int>> RegisterAsync(User user, string password);
+    public Task<ServiceResponse<string>> LoginAsync(string username, string password);
+    public Task<bool> UserExistsAsync(string username);
 }

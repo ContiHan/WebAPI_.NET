@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Abstractions;
+﻿using System.Security.Cryptography;
+using System.Text;
 
 namespace EntityFramework_DotNet7_SQLServer.Data;
 
@@ -53,15 +54,15 @@ public class AuthRepository : IAuthRepository
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {
-        using var hmac = new System.Security.Cryptography.HMACSHA512();
+        using var hmac = new HMACSHA512();
         passwordSalt = hmac.Key;
-        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
     }
 
     private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
     {
-        using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
-        var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        using var hmac = new HMACSHA512(passwordSalt);
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         return computedHash.SequenceEqual(passwordHash);
     }
 }

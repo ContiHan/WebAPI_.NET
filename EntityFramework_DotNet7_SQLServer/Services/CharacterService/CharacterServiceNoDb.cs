@@ -21,13 +21,18 @@ public class CharacterServiceNoDb : ICharacterService
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
     {
-        return new ServiceResponse<List<GetCharacterDto>> { Data = _mapper.Map<List<GetCharacterDto>>(_characters) };
+        return await Task.FromResult(new ServiceResponse<List<GetCharacterDto>>
+        {
+            Data = _mapper.Map<List<GetCharacterDto>>(_characters)
+        });
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)
     {
-        return new ServiceResponse<GetCharacterDto>
-            { Data = _mapper.Map<GetCharacterDto>(_characters.FirstOrDefault(c => c.Id == id)) };
+        return await Task.FromResult(new ServiceResponse<GetCharacterDto>
+        {
+            Data = _mapper.Map<GetCharacterDto>(_characters.FirstOrDefault(c => c.Id == id))
+        });
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> AddAsync(AddCharacterDto newCharacter)
@@ -35,7 +40,11 @@ public class CharacterServiceNoDb : ICharacterService
         var character = _mapper.Map<Character>(newCharacter);
         character.Id = _characters.Max(c => c.Id) + 1;
         _characters.Add(character);
-        return new ServiceResponse<GetCharacterDto> { Data = _mapper.Map<GetCharacterDto>(character) };
+
+        return await Task.FromResult(new ServiceResponse<GetCharacterDto>
+        {
+            Data = _mapper.Map<GetCharacterDto>(character)
+        });
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> UpdateAsync(UpdateCharacterDto updatedCharacter)
@@ -59,7 +68,7 @@ public class CharacterServiceNoDb : ICharacterService
             serviceResponse.Message = e.Message;
         }
 
-        return serviceResponse;
+        return await Task.FromResult(serviceResponse);
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> DeleteByIdAsync(int id)
@@ -84,6 +93,6 @@ public class CharacterServiceNoDb : ICharacterService
             serviceResponse.Message = e.Message;
         }
 
-        return serviceResponse;
+        return await Task.FromResult(serviceResponse);
     }
 }

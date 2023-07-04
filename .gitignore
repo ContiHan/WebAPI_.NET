@@ -2,3 +2,5 @@
 EntityFramework_DotNet7_SQLServer/obj
 .idea/.idea.WebAPI/.idea/dataSources.xml
 EntityFramework_DotNet7_SQLServer/appsettings.json
+.idea
+WebAPI.sln.DotSettings.user

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFramework_DotNet7_SQLServer.Controllers;
@@ -19,7 +20,8 @@ public class CharacterController : ControllerBase
     [HttpGet(nameof(GetAllCharactersAsync))]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharactersAsync()
     {
-        return Ok(await _characterService.GetAllAsync());
+        var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+        return Ok(await _characterService.GetAllAsync(userId));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

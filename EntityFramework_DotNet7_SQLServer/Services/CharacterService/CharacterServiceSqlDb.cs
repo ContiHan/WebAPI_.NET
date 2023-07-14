@@ -11,10 +11,13 @@ public class CharacterServiceSqlDb : ICharacterService
         _context = context;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync(int userId)
     {
         return new ServiceResponse<List<GetCharacterDto>>
-            { Data = _mapper.Map<List<GetCharacterDto>>(await _context.Characters.ToListAsync()) };
+        {
+            Data = _mapper.Map<List<GetCharacterDto>>(
+                await _context.Characters.Where(c => c.User!.Id == userId).ToListAsync())
+        };
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)

@@ -19,7 +19,7 @@ public class CharacterServiceNoDb : ICharacterService
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync(int userId)
     {
         return await Task.FromResult(new ServiceResponse<List<GetCharacterDto>>
         {

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFramework_DotNet7_SQLServer.Controllers;
@@ -30,7 +29,7 @@ public class CharacterController : ControllerBase
         return Ok(await _characterService.GetByIdAsync(id));
     }
 
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateCharacterAsync(
@@ -42,7 +41,7 @@ public class CharacterController : ControllerBase
             return NotFound(response.Message);
         }
 
-        return CreatedAtRoute(nameof(GetCharacterByIdAsync), new { id = response.Data.Id }, response);
+        return Ok(response);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

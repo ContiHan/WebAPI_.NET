@@ -20,8 +20,7 @@ public class CharacterController : ControllerBase
     [HttpGet(nameof(GetAllCharactersAsync))]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllCharactersAsync()
     {
-        var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-        return Ok(await _characterService.GetAllAsync(userId));
+        return Ok(await _characterService.GetAllAsync());
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

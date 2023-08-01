@@ -1,22 +1,29 @@
-﻿namespace EntityFramework_DotNet7_SQLServer.Services.CharacterService;
+﻿using System.Security.Claims;
+
+namespace EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 
 public class CharacterServiceSqlDb : ICharacterService
 {
     private readonly IMapper _mapper;
     private readonly DataContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CharacterServiceSqlDb(IMapper mapper, DataContext context)
+    public CharacterServiceSqlDb(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
     {
+        _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
         _context = context;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync(int userId)
+    private int GetUserId() =>
+        int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
     {
         return new ServiceResponse<List<GetCharacterDto>>
         {
             Data = _mapper.Map<List<GetCharacterDto>>(
-                await _context.Characters.Where(c => c.User!.Id == userId).ToListAsync())
+                await _context.Characters.Where(c => c.User!.Id == GetUserId()).ToListAsync())
         };
     }
 

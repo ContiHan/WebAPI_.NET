@@ -30,7 +30,10 @@ public class CharacterServiceSqlDb : ICharacterService
     public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)
     {
         return new ServiceResponse<GetCharacterDto>
-            { Data = _mapper.Map<GetCharacterDto>(await _context.Characters.FirstOrDefaultAsync(c => c.Id == id)) };
+        {
+            Data = _mapper.Map<GetCharacterDto>(
+                await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId()))
+        };
     }
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
@@ -55,8 +58,10 @@ public class CharacterServiceSqlDb : ICharacterService
 
         try
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
-            if (character is null)
+            var character = await _context.Characters
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
+            if (character is null || character.User!.Id != GetUserId())
             {
                 throw new Exception($"Character with Id '{updatedCharacter.Id}' not found");
             }
@@ -74,13 +79,13 @@ public class CharacterServiceSqlDb : ICharacterService
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> DeleteByIdAsync(int id)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteByIdAsync(int id)
     {
-        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
 
         try
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
+            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
             if (character is null)
             {
                 throw new Exception($"Character with id '{id}' not found");
@@ -89,7 +94,10 @@ public class CharacterServiceSqlDb : ICharacterService
             _context.Remove(character);
             await _context.SaveChangesAsync();
             serviceResponse.Message = $"Character '{character.Name}' has been deleted";
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            serviceResponse.Data = await _context.Characters
+                .Where(c => c.User!.Id == GetUserId())
+                .Select(c => _mapper.Map<GetCharacterDto>(c))
+                .ToListAsync();
         }
         catch (Exception e)
         {

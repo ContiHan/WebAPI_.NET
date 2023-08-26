@@ -2,17 +2,17 @@
 
 namespace EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 
-public class CharacterServiceSqlDb : ICharacterService
+public class CharacterService : ICharacterService
 {
-    private readonly IMapper _mapper;
     private readonly DataContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMapper _mapper;
 
-    public CharacterServiceSqlDb(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
+    public CharacterService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
     {
+        _context = context;
         _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
-        _context = context;
     }
 
     private int GetUserId() =>

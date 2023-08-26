@@ -2,10 +2,12 @@ global using EntityFramework_DotNet7_SQLServer.Models;
 global using EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 global using EntityFramework_DotNet7_SQLServer.Dtos.Character;
 global using EntityFramework_DotNet7_SQLServer.Dtos.User;
+global using EntityFramework_DotNet7_SQLServer.Dtos.Weapon;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using EntityFramework_DotNet7_SQLServer.Data;
 using System.Text;
+using EntityFramework_DotNet7_SQLServer.Services.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -28,11 +30,12 @@ builder.Services.AddSwaggerGen(c =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    
+
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddScoped<ICharacterService, CharacterServiceSqlDb>();
+builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

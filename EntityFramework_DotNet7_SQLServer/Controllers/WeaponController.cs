@@ -17,13 +17,22 @@ public class WeaponController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateWeaponAsync(AddWeaponDto newWeapon)
     {
         var response = await _weaponService.AddAsync(newWeapon);
+        if (response.Message != "Character not found.")
+        {
+            return BadRequest(response);
+        }
+
         if (response.Data is null)
         {
             return NotFound(response.Message);
         }
+
 
         return Ok(response);
     }

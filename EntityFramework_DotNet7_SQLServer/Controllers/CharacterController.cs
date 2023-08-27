@@ -73,6 +73,10 @@ public class CharacterController : ControllerBase
         return Accepted(response);
     }
     
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost(nameof(AddCharacterSkillAsync))]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkillAsync(AddCharacterSkillDto newCharacterSkill)
     {
         var response = await _characterService.AddCharacterSkillAsync(newCharacterSkill);

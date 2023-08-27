@@ -23,7 +23,10 @@ public class CharacterService : ICharacterService
         return new ServiceResponse<List<GetCharacterDto>>
         {
             Data = _mapper.Map<List<GetCharacterDto>>(
-                await _context.Characters.Where(c => c.User!.Id == GetUserId()).ToListAsync())
+                await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.Skills)
+                    .Where(c => c.User!.Id == GetUserId()).ToListAsync())
         };
     }
 

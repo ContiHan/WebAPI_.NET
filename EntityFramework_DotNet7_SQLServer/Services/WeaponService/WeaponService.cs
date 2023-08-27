@@ -18,7 +18,7 @@ public class WeaponService : IWeaponService
     public async Task<ServiceResponse<GetCharacterDto>> AddWeaponAsync(AddWeaponDto newWeapon)
     {
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
-        
+
         try
         {
             var character = await _context.Characters
@@ -33,11 +33,11 @@ public class WeaponService : IWeaponService
                 serviceResponse.Message = "Character not found.";
                 return serviceResponse;
             }
-            
+
             var weapon = _mapper.Map<Weapon>(newWeapon);
             _context.Weapons.Add(weapon);
             await _context.SaveChangesAsync();
-            
+
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception e)

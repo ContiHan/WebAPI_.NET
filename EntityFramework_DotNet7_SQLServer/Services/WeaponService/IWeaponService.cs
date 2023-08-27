@@ -2,5 +2,5 @@
 
 public interface IWeaponService
 {
-    public Task<ServiceResponse<GetCharacterDto>> AddAsync(AddWeaponDto newWeapon);
+    public Task<ServiceResponse<GetCharacterDto>> AddWeaponAsync(AddWeaponDto newWeapon);
 }

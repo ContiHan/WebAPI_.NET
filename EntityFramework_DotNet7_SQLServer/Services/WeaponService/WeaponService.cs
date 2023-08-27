@@ -15,7 +15,7 @@ public class WeaponService : IWeaponService
         _mapper = mapper;
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> AddAsync(AddWeaponDto newWeapon)
+    public async Task<ServiceResponse<GetCharacterDto>> AddWeaponAsync(AddWeaponDto newWeapon)
     {
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
         

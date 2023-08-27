@@ -18,7 +18,7 @@ public class CharacterService : ICharacterService
     private int GetUserId() =>
         int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllAsync()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync()
     {
         return new ServiceResponse<List<GetCharacterDto>>
         {
@@ -27,7 +27,7 @@ public class CharacterService : ICharacterService
         };
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> GetByIdAsync(int id)
+    public async Task<ServiceResponse<GetCharacterDto>> GetCharacterByIdAsync(int id)
     {
         return new ServiceResponse<GetCharacterDto>
         {
@@ -36,7 +36,7 @@ public class CharacterService : ICharacterService
         };
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> AddAsync(AddCharacterDto newCharacter)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
     {
         var character = _mapper.Map<Character>(newCharacter);
         character.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
@@ -52,7 +52,7 @@ public class CharacterService : ICharacterService
         };
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> UpdateAsync(UpdateCharacterDto updatedCharacter)
+    public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter)
     {
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
 
@@ -79,7 +79,7 @@ public class CharacterService : ICharacterService
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteByIdAsync(int id)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacterByIdAsync(int id)
     {
         var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
 

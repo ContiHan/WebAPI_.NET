@@ -35,7 +35,10 @@ public class CharacterService : ICharacterService
         return new ServiceResponse<GetCharacterDto>
         {
             Data = _mapper.Map<GetCharacterDto>(
-                await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId()))
+                await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.Skills)
+                    .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId()))
         };
     }
 
@@ -127,7 +130,7 @@ public class CharacterService : ICharacterService
                 serviceResponse.Message = $"Character not found";
                 return serviceResponse;
             }
-            
+
             var skill = await _context.Skills
                 .FirstOrDefaultAsync(s => s.Id == newCharacterSkill.SkillId);
             if (skill is null)
@@ -136,7 +139,7 @@ public class CharacterService : ICharacterService
                 serviceResponse.Message = $"Skill not found";
                 return serviceResponse;
             }
-            
+
             character.Skills!.Add(skill);
             await _context.SaveChangesAsync();
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);

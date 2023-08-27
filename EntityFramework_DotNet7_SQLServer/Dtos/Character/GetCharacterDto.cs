@@ -1,6 +1,4 @@
-﻿using EntityFramework_DotNet7_SQLServer.Dtos.Skill;
-
-namespace EntityFramework_DotNet7_SQLServer.Dtos.Character;
+﻿namespace EntityFramework_DotNet7_SQLServer.Dtos.Character;
 
 public class GetCharacterDto
 {

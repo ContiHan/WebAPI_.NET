@@ -72,4 +72,20 @@ public class CharacterController : ControllerBase
 
         return Accepted(response);
     }
+    
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkillAsync(AddCharacterSkillDto newCharacterSkill)
+    {
+        var response = await _characterService.AddCharacterSkillAsync(newCharacterSkill);
+        if (response.Message != "Character not found." || response.Message != "Skill not found.")
+        {
+            return BadRequest(response);
+        }
+
+        if (response.Data is null)
+        {
+            return NotFound(response.Message);
+        }
+
+        return Ok(response);
+    }
 }

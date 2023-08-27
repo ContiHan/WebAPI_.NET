@@ -7,4 +7,5 @@ public interface ICharacterService
     public Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter);
     public Task<ServiceResponse<GetCharacterDto>> UpdateCharacterAsync(UpdateCharacterDto updatedCharacter);
     public Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacterByIdAsync(int id);
+    public Task<ServiceResponse<GetCharacterDto>> AddCharacterSkillAsync(AddCharacterSkillDto newCharacterSkill);
 }

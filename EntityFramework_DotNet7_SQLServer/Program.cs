@@ -2,6 +2,7 @@ global using EntityFramework_DotNet7_SQLServer.Models;
 global using EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 global using EntityFramework_DotNet7_SQLServer.Dtos.Character;
 global using EntityFramework_DotNet7_SQLServer.Dtos.User;
+global using EntityFramework_DotNet7_SQLServer.Dtos.Skill;
 global using EntityFramework_DotNet7_SQLServer.Dtos.Weapon;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;

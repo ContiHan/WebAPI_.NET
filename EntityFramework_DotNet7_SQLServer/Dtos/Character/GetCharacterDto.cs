@@ -1,4 +1,6 @@
-﻿namespace EntityFramework_DotNet7_SQLServer.Dtos.Character;
+﻿using EntityFramework_DotNet7_SQLServer.Dtos.Skill;
+
+namespace EntityFramework_DotNet7_SQLServer.Dtos.Character;
 
 public class GetCharacterDto
 {
@@ -10,4 +12,5 @@ public class GetCharacterDto
     public int Intelligence { get; set; } = 10;
     public RpgClass Class { get; set; } = RpgClass.Knight;
     public GetWeaponDto? Weapon { get; set; }
+    public List<GetSkillDto>? Skills { get; set; }
 }

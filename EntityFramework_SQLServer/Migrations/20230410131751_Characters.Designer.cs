@@ -24,7 +24,7 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Character", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

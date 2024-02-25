@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework_DotNet7_SQLServer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230827073958_Skills")]
-    partial class Skills
+    [Migration("20230827075610_SkillSeeding")]
+    partial class SkillSeeding
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
                     b.ToTable("CharacterSkill");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Character", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Character", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,7 +77,7 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
                     b.ToTable("Characters");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Skill", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Skill", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,9 +95,29 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Skills");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Damage = 30,
+                            Name = "Hammer of Justice"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Damage = 20,
+                            Name = "Consecration"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Damage = 50,
+                            Name = "Divine Storm"
+                        });
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.User", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,7 +142,7 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Weapon", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Weapon", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,45 +170,45 @@ namespace EntityFramework_DotNet7_SQLServer.Migrations
 
             modelBuilder.Entity("CharacterSkill", b =>
                 {
-                    b.HasOne("EntityFramework_DotNet7_SQLServer.Models.Character", null)
+                    b.HasOne("EntityFramework_SQLServer.Models.Character", null)
                         .WithMany()
                         .HasForeignKey("CharactersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EntityFramework_DotNet7_SQLServer.Models.Skill", null)
+                    b.HasOne("EntityFramework_SQLServer.Models.Skill", null)
                         .WithMany()
                         .HasForeignKey("SkillsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Character", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Character", b =>
                 {
-                    b.HasOne("EntityFramework_DotNet7_SQLServer.Models.User", "User")
+                    b.HasOne("EntityFramework_SQLServer.Models.User", "User")
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Weapon", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Weapon", b =>
                 {
-                    b.HasOne("EntityFramework_DotNet7_SQLServer.Models.Character", "Character")
+                    b.HasOne("EntityFramework_SQLServer.Models.Character", "Character")
                         .WithOne("Weapon")
-                        .HasForeignKey("EntityFramework_DotNet7_SQLServer.Models.Weapon", "CharacterId")
+                        .HasForeignKey("EntityFramework_SQLServer.Models.Weapon", "CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Character");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.Character", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.Character", b =>
                 {
                     b.Navigation("Weapon");
                 });
 
-            modelBuilder.Entity("EntityFramework_DotNet7_SQLServer.Models.User", b =>
+            modelBuilder.Entity("EntityFramework_SQLServer.Models.User", b =>
                 {
                     b.Navigation("Characters");
                 });

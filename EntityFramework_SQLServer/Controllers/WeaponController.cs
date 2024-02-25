@@ -7,22 +7,15 @@ namespace EntityFramework_DotNet7_SQLServer.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class WeaponController : ControllerBase
+public class WeaponController(IWeaponService weaponService) : ControllerBase
 {
-    private readonly IWeaponService _weaponService;
-
-    public WeaponController(IWeaponService weaponService)
-    {
-        _weaponService = weaponService;
-    }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> CreateWeaponAsync(AddWeaponDto newWeapon)
     {
-        var response = await _weaponService.AddWeaponAsync(newWeapon);
+        var response = await weaponService.AddWeaponAsync(newWeapon);
         if (response.Message != "Character not found.")
         {
             return BadRequest(response);

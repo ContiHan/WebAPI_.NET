@@ -6,17 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace EntityFramework_DotNet7_SQLServer.Data;
 
-public class AuthRepository : IAuthRepository
+public class AuthRepository(DataContext context, IConfiguration configuration) : IAuthRepository
 {
-    private readonly DataContext _context;
-    private readonly IConfiguration _configuration;
-
-    public AuthRepository(DataContext context, IConfiguration configuration)
-    {
-        _context = context;
-        _configuration = configuration;
-    }
-
     public async Task<ServiceResponse<int>> RegisterAsync(User user, string password)
     {
         var response = new ServiceResponse<int>();
@@ -31,8 +22,8 @@ public class AuthRepository : IAuthRepository
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
         response.Data = user.Id;
         return response;
     }
@@ -40,7 +31,7 @@ public class AuthRepository : IAuthRepository
     public async Task<ServiceResponse<string>> LoginAsync(string username, string password)
     {
         var response = new ServiceResponse<string>();
-        var user = await _context.Users.FirstOrDefaultAsync(
+        var user = await context.Users.FirstOrDefaultAsync(
             u => string.Equals(u.Username.ToLower(), username.ToLower()));
         if (user is null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
         {
@@ -55,7 +46,7 @@ public class AuthRepository : IAuthRepository
 
     public async Task<bool> UserExistsAsync(string username)
     {
-        return await _context.Users.AnyAsync(u => string.Equals(u.Username.ToLower(), username.ToLower()));
+        return await context.Users.AnyAsync(u => string.Equals(u.Username.ToLower(), username.ToLower()));
     }
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -80,7 +71,7 @@ public class AuthRepository : IAuthRepository
             new(ClaimTypes.Name, user.Username)
         };
 
-        var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value ??
+        var appSettingsToken = configuration.GetSection("AppSettings:Token").Value ??
                                throw new Exception("AppSettings token is null");
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettingsToken));

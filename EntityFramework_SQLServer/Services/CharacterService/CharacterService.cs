@@ -2,28 +2,15 @@
 
 namespace EntityFramework_DotNet7_SQLServer.Services.CharacterService;
 
-public class CharacterService : ICharacterService
+public class CharacterService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+    : ICharacterService
 {
-    private readonly DataContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMapper _mapper;
-
-    public CharacterService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
-    {
-        _context = context;
-        _httpContextAccessor = httpContextAccessor;
-        _mapper = mapper;
-    }
-
-    private int GetUserId() =>
-        int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
     public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersAsync()
     {
         return new ServiceResponse<List<GetCharacterDto>>
         {
-            Data = _mapper.Map<List<GetCharacterDto>>(
-                await _context.Characters
+            Data = mapper.Map<List<GetCharacterDto>>(
+                await context.Characters
                     .Include(c => c.Weapon)
                     .Include(c => c.Skills)
                     .Where(c => c.User!.Id == GetUserId()).ToListAsync())
@@ -34,8 +21,8 @@ public class CharacterService : ICharacterService
     {
         return new ServiceResponse<GetCharacterDto>
         {
-            Data = _mapper.Map<GetCharacterDto>(
-                await _context.Characters
+            Data = mapper.Map<GetCharacterDto>(
+                await context.Characters
                     .Include(c => c.Weapon)
                     .Include(c => c.Skills)
                     .FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId()))
@@ -44,16 +31,16 @@ public class CharacterService : ICharacterService
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacterAsync(AddCharacterDto newCharacter)
     {
-        var character = _mapper.Map<Character>(newCharacter);
-        character.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
-        _context.Characters.Add(character);
-        await _context.SaveChangesAsync();
+        var character = mapper.Map<Character>(newCharacter);
+        character.User = await context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
+        context.Characters.Add(character);
+        await context.SaveChangesAsync();
 
         return new ServiceResponse<List<GetCharacterDto>>
         {
-            Data = await _context.Characters
+            Data = await context.Characters
                 .Where(c => c.User!.Id == GetUserId())
-                .Select(c => _mapper.Map<GetCharacterDto>(c))
+                .Select(c => mapper.Map<GetCharacterDto>(c))
                 .ToListAsync()
         };
     }
@@ -64,7 +51,7 @@ public class CharacterService : ICharacterService
 
         try
         {
-            var character = await _context.Characters
+            var character = await context.Characters
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
             if (character is null || character.User!.Id != GetUserId())
@@ -72,9 +59,9 @@ public class CharacterService : ICharacterService
                 throw new Exception($"Character with Id '{updatedCharacter.Id}' not found");
             }
 
-            _mapper.Map(updatedCharacter, character);
-            await _context.SaveChangesAsync();
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            mapper.Map(updatedCharacter, character);
+            await context.SaveChangesAsync();
+            serviceResponse.Data = mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception e)
         {
@@ -91,18 +78,18 @@ public class CharacterService : ICharacterService
 
         try
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
+            var character = await context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
             if (character is null)
             {
                 throw new Exception($"Character with id '{id}' not found");
             }
 
-            _context.Remove(character);
-            await _context.SaveChangesAsync();
+            context.Remove(character);
+            await context.SaveChangesAsync();
             serviceResponse.Message = $"Character '{character.Name}' has been deleted";
-            serviceResponse.Data = await _context.Characters
+            serviceResponse.Data = await context.Characters
                 .Where(c => c.User!.Id == GetUserId())
-                .Select(c => _mapper.Map<GetCharacterDto>(c))
+                .Select(c => mapper.Map<GetCharacterDto>(c))
                 .ToListAsync();
         }
         catch (Exception e)
@@ -119,7 +106,7 @@ public class CharacterService : ICharacterService
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
         try
         {
-            var character = await _context.Characters
+            var character = await context.Characters
                 .Include(c => c.Weapon)
                 .Include(c => c.Skills)
                 .FirstOrDefaultAsync(c =>
@@ -131,7 +118,7 @@ public class CharacterService : ICharacterService
                 return serviceResponse;
             }
 
-            var skill = await _context.Skills
+            var skill = await context.Skills
                 .FirstOrDefaultAsync(s => s.Id == newCharacterSkill.SkillId);
             if (skill is null)
             {
@@ -141,8 +128,8 @@ public class CharacterService : ICharacterService
             }
 
             character.Skills!.Add(skill);
-            await _context.SaveChangesAsync();
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            await context.SaveChangesAsync();
+            serviceResponse.Data = mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception e)
         {
@@ -152,4 +139,7 @@ public class CharacterService : ICharacterService
 
         return serviceResponse;
     }
+
+    private int GetUserId() =>
+        int.Parse(httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 }

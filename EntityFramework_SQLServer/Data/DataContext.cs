@@ -1,10 +1,11 @@
 ﻿namespace EntityFramework_DotNet7_SQLServer.Data;
 
-public class DataContext : DbContext
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    {
-    }
+    public DbSet<Character> Characters => Set<Character>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Weapon> Weapons => Set<Weapon>();
+    public DbSet<Skill> Skills => Set<Skill>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,9 +30,4 @@ public class DataContext : DbContext
             }
         );
     }
-
-    public DbSet<Character> Characters => Set<Character>();
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Weapon> Weapons => Set<Weapon>();
-    public DbSet<Skill> Skills => Set<Skill>();
 }
